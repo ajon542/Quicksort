@@ -75,15 +75,11 @@ function drawCircle(x, y, radius, color) {
     view.draw();
 }
 
-function drawRectangle(x, y, width, height) {
+function drawRectangle(x, y, width, height, color) {
     var rectangle = new Rectangle(new Point(x, y), new Point(x + width, y + height));
     var path = new Path.Rectangle(rectangle);
-    path.fillColor = {
-        red: 0,
-        green: 0.5,
-        blue: 1,
-        alpha: 1
-    };
+
+    path.fillColor = color;
     
     return path;
 }
@@ -96,7 +92,25 @@ function drawArray(values) {
     var width = 5;
     
     for (var i = 0; i < values.length; ++i) {
-        drawRectangle(x, y, width, values[i]);
+        var color;
+        if (i == currA || i == currB) {
+            color = {
+                red: 1,
+                green: 0,
+                blue: 0,
+                alpha: 1
+            };
+        } else {
+            color = {
+                red: 0,
+                green: 0.5,
+                blue: 1,
+                alpha: 1
+            };
+        }
+
+
+        drawRectangle(x, y, width, values[i], color);
         x += width + 2;
     }
 
@@ -158,11 +172,15 @@ io.on('drawArray', function(data) {
     drawArray(items);
 });
 
-
+var currA = 0;
+var currB = 0;
 function swap(items, a, b) {
     var temp = items[a];
     items[a] = items[b];
     items[b] = temp;
+
+    currA = a;
+    currB = b;
 }
 
 io.on('swap', function (data) {
