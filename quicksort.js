@@ -4,12 +4,14 @@ function swap(items, a, b) {
     var temp = items[a];
     items[a] = items[b];
     items[b] = temp;
+
+    swapCallback(items);
 }
 
-var callback;
+var swapCallback;
 
 function quicksort(items, callbackFn) {
-    callback = callbackFn;
+    swapCallback = callbackFn;
     sort(items, 0, items.length - 1);
 }
 
@@ -20,7 +22,6 @@ function sort(items, left, right) {
     if (items.length > 1) {
         
         index = partition(items, left, right);
-        callback(index);
 
         if (left < index - 1) {
             sort(items, left, index - 1);

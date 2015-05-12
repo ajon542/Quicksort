@@ -96,15 +96,15 @@ function drawRectangle(x, y, width, height) {
 }
 
 // Draws a visual representation of a list of values.
-function drawArray(group, values, yOffset) {
+function drawArray(values, yOffset) {
     
     var x = 100;
     // Draw the rectangles up the right way.
-    var y = yOffset;
+    var y = 100;
     var width = 5;
     
     for (var i = 0; i < values.length; ++i) {
-        group.addChild(drawRectangle(x, y - values[i], width, values[i]));
+        drawRectangle(x, y, width, values[i]);
         x += width + 2;
     }
 
@@ -150,16 +150,66 @@ io.on('drawCircle', function(data) {
 
 // Listen for 'drawCircle' events
 // created by other users
-var group = new Group();
+//var group = new Group();
 io.on('drawArray', function(data) {
 
     console.log('drawArray event recieved:', data);
 
     //group.remove();
-    group = new Group();
+    //group = new Group();
 
     // Draw the circle using the data sent
     // from another user
-    drawArray(group, data.heightValues, data.yOffset);
+    drawArray(data.heightValues, data.yOffset);
 
+});
+
+io.on('swap', function (data) {
+    
+    console.log('swap event recieved');
+    
+    project.activeLayer.removeChildren();
+    
+    // Draw the circle using the data sent
+    // from another user
+    drawArray(data.heightValues, data.yOffset);
+
+    //var temp = group.children[0];
+    //group.children[0] = group.children[1];
+    //group.children[1] = temp;
+    
+    //var ax = group.children[data.a].bounds.x;
+    //var ay = group.children[data.a].bounds.y;
+    //var ah = group.children[data.a].bounds.height;
+    
+    //var bx = group.children[data.b].bounds.x;
+    //var by = group.children[data.b].bounds.y;
+    //var bh = group.children[data.b].bounds.height;
+    //var bBounds = group.children[data.b].bounds;
+    
+    //console.log('aBounds: ' + aBounds);
+    //console.log('bBounds: ' + bBounds);
+
+    //var newPosA = new Point(group.children[data.b].position.x, 100);
+    //var newPosB = new Point(group.children[data.a].position.x, 100);
+
+    //var newBoundsA = new Rectangle(new Point(bBounds.x, bBounds.y), new Point(bBounds.width, bBounds.height));
+    //var newBoundsB = new Rectangle(new Point(aBounds.x, aBounds.y), new Point(aBounds.width, aBounds.height));
+    
+    //group.children[data.a].bounds = newBoundsA;
+    //group.children[data.b].bounds = newBoundsB;
+
+    //drawRectangle(x, y, width, height);
+    //group.children[data.a].replaceWith(drawRectangle(bx, by, 5, bh));
+    //group.children[data.b].replaceWith(drawRectangle(ax, ay, 5, ah));
+    //group.children[data.a].remove();
+    //group.children[data.b].remove();
+
+    //drawRectangle(bx, by, 5, bh);
+    //drawRectangle(ax, ay, 5, ah);
+    //group.children[data.a] = drawRectangle(bx, by, 5, bh);
+    //group.children[data.b] = drawRectangle(ax, ay, 5, ah);
+
+    // Refresh the view, so we always get an update, even if the tab is not in focus
+    view.draw();
 });
