@@ -65,16 +65,11 @@ io.sockets.on('connection', function (socket) {
         
         socket.emit('drawArray', { heightValues: heightValues, yOffset: 300 });
         quicksort(heightValues, swapCallback);
-        //socket.emit('drawArray', { heightValues: heightValues, yOffset: 700 });
     });
 
 });
 
-function swapCallback(items) {
-    // This is just inefficient to send the entire list of items
-    // and then redraw them all. I just need to work out the grouping
-    // and project structure of paperjs to update the visual representation
-    // of the swapped values.
-    console.log("swapping");
-    io.sockets.emit('swap', { heightValues: items, yOffset: 300 });
+function swapCallback(a, b) {
+    console.log("swapping: " + a + "," + b);
+    io.sockets.emit('swap', { a: a, b: b });
 }

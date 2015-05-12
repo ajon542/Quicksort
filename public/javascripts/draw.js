@@ -4,6 +4,8 @@
 // We dont want it to be larger than this
 tool.maxDistance = 50;
 
+var items = [];
+
 
 // Returns an object specifying a semi-random color
 // The color will always have a red value of 0
@@ -17,15 +19,6 @@ function randomColor() {
         alpha: (Math.random() * 0.25) + 0.05
     };
 
-}
-
-function sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-        if ((new Date().getTime() - start) > milliseconds) {
-            break;
-        }
-    }
 }
 
 
@@ -96,10 +89,9 @@ function drawRectangle(x, y, width, height) {
 }
 
 // Draws a visual representation of a list of values.
-function drawArray(values, yOffset) {
+function drawArray(values) {
     
     var x = 100;
-    // Draw the rectangles up the right way.
     var y = 100;
     var width = 5;
     
@@ -154,25 +146,36 @@ io.on('drawCircle', function(data) {
 io.on('drawArray', function(data) {
 
     console.log('drawArray event recieved:', data);
+    
+    // Store the array of items locally.
+    items = data.heightValues;
 
     //group.remove();
     //group = new Group();
 
     // Draw the circle using the data sent
     // from another user
-    drawArray(data.heightValues, data.yOffset);
-
+    drawArray(items);
 });
+
+
+function swap(items, a, b) {
+    var temp = items[a];
+    items[a] = items[b];
+    items[b] = temp;
+}
 
 io.on('swap', function (data) {
     
     console.log('swap event recieved');
     
     project.activeLayer.removeChildren();
+
+    swap(items, data.a, data.b);
     
     // Draw the circle using the data sent
     // from another user
-    drawArray(data.heightValues, data.yOffset);
+    drawArray(items);
 
     //var temp = group.children[0];
     //group.children[0] = group.children[1];
@@ -211,5 +214,5 @@ io.on('swap', function (data) {
     //group.children[data.b] = drawRectangle(ax, ay, 5, ah);
 
     // Refresh the view, so we always get an update, even if the tab is not in focus
-    view.draw();
+    //view.draw();
 });
