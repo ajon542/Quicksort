@@ -8,6 +8,11 @@ function swap(items, a, b) {
     swapCallback(a, b);
 }
 
+function compare(a, b) {
+    compareCallback(a, b);
+    return a < b;
+}
+
 var swapCallback;
 var compareCallback;
 
@@ -24,17 +29,14 @@ function sort(items, left, right) {
     if (items.length > 1) {
         
         index = partition(items, left, right);
-
-        if (left < index - 1) {
-            compareCallback(left, index - 1);
+        
+        if (compare(left, index - 1)) {
             sort(items, left, index - 1);
         }
         
-        if (index < right) {
-            compareCallback(index, right);
+        if (compare(index, right)) {
             sort(items, index, right);
         }
-
     }
     
     return items;
