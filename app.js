@@ -32,6 +32,24 @@ app.configure('development', function () {
 app.get('/', routes.index);
 app.get('/users', user.list);
 
+app.post('/beginSorting', function (req, res) {
+    
+    console.log(req.body);
+    var itemCount = req.body.itemCount;
+
+    // Generate random values to be sorted.
+    var randomValues = [];
+    for (var i = 0; i < itemCount; ++i) {
+        randomValues.push((Math.random() * 500) + 1);
+    }
+    
+    // Send the initial values to the client to draw.
+    io.sockets.emit('drawArray', { randomValues: randomValues, yOffset: 300 });
+    
+    // Start the quicksort.
+    quicksort(randomValues, swapCallback, compareCallback);
+});
+
 // Enable Socket.io
 var server = http.createServer(app).listen(app.get('port'));
 var io = require('socket.io').listen(server);
@@ -51,25 +69,6 @@ io.sockets.on('connection', function (socket) {
         
         console.log('socket: server sends pong to all (3)');
 
-    });
-    
-    // Listen for the 'beginSorting' message from the client.
-    socket.on('beginSorting', function (session) {
-        
-        // Log the session identifier.
-        console.log("session: " + session);
-        
-        // Generate random values to be sorted.
-        var randomValues = [];
-        for (var i = 0; i < 230; ++i) {
-            randomValues.push((Math.random() * 500) + 1);
-        }
-        
-        // Send the initial values to the client to draw.
-        socket.emit('drawArray', { randomValues: randomValues, yOffset: 300 });
-        
-        // Start the quicksort.
-        quicksort(randomValues, swapCallback, compareCallback);
     });
 
 });

@@ -1,11 +1,4 @@
-
-// The faster the user moves their mouse
-// the larger the circle will be
-// We dont want it to be larger than this
-tool.maxDistance = 50;
-
 var items = [];
-
 
 // Returns an object specifying a semi-random color
 // The color will always have a red value of 0
@@ -21,19 +14,10 @@ function randomColor() {
 
 }
 
-
-// every time the user drags their mouse
-// this function will be executed
-function onMouseDown(event) {
-    
-    // TODO: Probably shouldn't do this any time the mouse is clicked.
-    beginSorting();
-}
-
 function drawRectangle(x, y, width, height, color) {
     var rectangle = new Rectangle(new Point(x, y), new Point(x + width, y + height));
     var path = new Path.Rectangle(rectangle);
-
+    
     path.fillColor = color;
     
     return path;
@@ -70,35 +54,24 @@ function drawArray(values) {
                 alpha: 1
             };
         }
-
-
+        
+        
         drawRectangle(x, y, width, values[i], color);
         x += width + 2;
     }
-
+    
     // Refresh the view, so we always get an update, even if the tab is not in focus
     view.draw();
 }
 
-// This function sends the data for a circle to the server
-// so that the server can broadcast it to every other user
-function beginSorting() {
-    
-    // Each Socket.IO connection has a unique session id.
-    var sessionId = io.socket.sessionid;
-    
-    // Send a 'beginSorting' event and sessionId to the server.
-    io.emit('beginSorting', sessionId);
-}
-
 // Listen for 'drawArray' events.
-io.on('drawArray', function(data) {
-
+io.on('drawArray', function (data) {
+    
     console.log('drawArray event recieved:', data);
     
     // Store the array of items locally.
     items = data.randomValues;
-
+    
     // Draw the sorted items.
     drawArray(items);
 });
@@ -110,7 +83,7 @@ function swap(items, a, b) {
     var temp = items[a];
     items[a] = items[b];
     items[b] = temp;
-
+    
     currA = a;
     currB = b;
 }
