@@ -1,4 +1,20 @@
 extends layout
 block content
-	canvas( id="draw", resize="true", keepalive="true" )
-	script( type="text/paperscript", src="javascripts/draw.js", canvas="draw")
+    doctype html
+    html
+      body
+        h1 Quicksort
+        p
+          | Visualization of the Quicksort Algorithm
+        p.
+        div
+          script.
+            var something = function() {
+              alert("clicked")
+            }
+
+          button(onclick='something()') Click
+
+        canvas( id="draw", resize="true", keepalive="true" )
+        script( type="text/paperscript", src="javascripts/draw.js", canvas="draw")
+

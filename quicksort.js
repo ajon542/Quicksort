@@ -1,15 +1,18 @@
 ﻿module.exports = quicksort;
 
 function swap(items, a, b) {
+    
+    swapCallback(a, b);
+
     var temp = items[a];
     items[a] = items[b];
     items[b] = temp;
-
-    swapCallback(a, b);
 }
 
 function compare(a, b) {
+    
     compareCallback(a, b);
+    
     return a < b;
 }
 
@@ -44,7 +47,7 @@ function sort(items, left, right) {
 
 function partition(items, left, right) {
     
-    var pivot = items[Math.floor((right + left) / 2)],
+    var pivot = items[(left + right) >> 1],
         i = left,
         j = right;
     
