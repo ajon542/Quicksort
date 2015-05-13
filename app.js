@@ -53,18 +53,23 @@ io.sockets.on('connection', function (socket) {
 
     });
     
-    socket.on('drawCircle', function (data, session) {
+    // Listen for the 'beginSorting' message from the client.
+    socket.on('beginSorting', function (session) {
         
-        console.log("session " + session + " drew:");
-        console.log(data);
+        // Log the session identifier.
+        console.log("session: " + session);
         
-        var heightValues = [];
-        for (var i = 0; i < 200; ++i) {
-            heightValues.push((Math.random() * 200) + 1);
+        // Generate random values to be sorted.
+        var randomValues = [];
+        for (var i = 0; i < 230; ++i) {
+            randomValues.push((Math.random() * 500) + 1);
         }
         
-        socket.emit('drawArray', { heightValues: heightValues, yOffset: 300 });
-        quicksort(heightValues, swapCallback);
+        // Send the initial values to the client to draw.
+        socket.emit('drawArray', { randomValues: randomValues, yOffset: 300 });
+        
+        // Start the quicksort.
+        quicksort(randomValues, swapCallback);
     });
 
 });
@@ -72,4 +77,15 @@ io.sockets.on('connection', function (socket) {
 function swapCallback(a, b) {
     console.log("swapping: " + a + "," + b);
     io.sockets.emit('swap', { a: a, b: b });
+
+    sleep(50);
+}
+
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) {
+            break;
+        }
+    }
 }
