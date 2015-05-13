@@ -69,7 +69,7 @@ io.sockets.on('connection', function (socket) {
         socket.emit('drawArray', { randomValues: randomValues, yOffset: 300 });
         
         // Start the quicksort.
-        quicksort(randomValues, swapCallback);
+        quicksort(randomValues, swapCallback, compareCallback);
     });
 
 });
@@ -78,6 +78,13 @@ function swapCallback(a, b) {
     console.log("swapping: " + a + "," + b);
     io.sockets.emit('swap', { a: a, b: b });
 
+    sleep(50);
+}
+
+function compareCallback(a, b) {
+    console.log("comparing: " + a + "," + b);
+    io.sockets.emit('compare', { a: a, b: b });
+    
     sleep(50);
 }
 

@@ -55,6 +55,13 @@ function drawArray(values) {
                 blue: 0,
                 alpha: 1
             };
+        } else if (i == compA || i == compB) {
+            color = {
+                red: 0,
+                green: 1,
+                blue: 0,
+                alpha: 1
+            };
         } else {
             color = {
                 red: 0,
@@ -118,6 +125,23 @@ io.on('swap', function (data) {
     
     // Swap our local copy of the items so they match the server.
     swap(items, data.a, data.b);
+    
+    // Draw the sorted items.
+    drawArray(items);
+});
+
+var compA = 0;
+var compB = 0;
+io.on('compare', function (data) {
+    
+    // Log the swap event.
+    console.log('compare event recieved');
+    
+    // Remove the previously drawn items.
+    project.activeLayer.removeChildren();
+    
+    compA = data.a;
+    compB = data.b;
     
     // Draw the sorted items.
     drawArray(items);

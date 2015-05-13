@@ -9,9 +9,11 @@ function swap(items, a, b) {
 }
 
 var swapCallback;
+var compareCallback;
 
-function quicksort(items, callbackFn) {
-    swapCallback = callbackFn;
+function quicksort(items, swapCallbackFn, compareCallbackFn) {
+    swapCallback = swapCallbackFn;
+    compareCallback = compareCallbackFn;
     sort(items, 0, items.length - 1);
 }
 
@@ -24,10 +26,12 @@ function sort(items, left, right) {
         index = partition(items, left, right);
 
         if (left < index - 1) {
+            compareCallback(left, index - 1);
             sort(items, left, index - 1);
         }
         
         if (index < right) {
+            compareCallback(index, right);
             sort(items, index, right);
         }
 
