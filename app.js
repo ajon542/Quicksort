@@ -47,7 +47,14 @@ app.post('/beginSorting', function (req, res) {
     io.sockets.emit('drawArray', { randomValues: randomValues, yOffset: 300 });
     
     // Start the quicksort.
+    // Note: This will block here until the sorting is complete.
     quicksort(randomValues, swapCallback, compareCallback);
+    
+    // Meh, let the sorted array be seen for a second...
+    sleep(1000);
+    
+    // Redirect back to the index.
+    res.redirect('/');
 });
 
 // Enable Socket.io
@@ -73,6 +80,7 @@ io.sockets.on('connection', function (socket) {
 
 });
 
+// Callback from quicksort for the swap.
 function swapCallback(a, b) {
     console.log("swapping: " + a + "," + b);
     io.sockets.emit('swap', { a: a, b: b });
@@ -80,6 +88,7 @@ function swapCallback(a, b) {
     sleep(50);
 }
 
+// Callback from quicksort for the comparison.
 function compareCallback(a, b) {
     console.log("comparing: " + a + "," + b);
     io.sockets.emit('compare', { a: a, b: b });
@@ -87,6 +96,7 @@ function compareCallback(a, b) {
     sleep(50);
 }
 
+// Put the server to sleep. [Evil Laughter]
 function sleep(milliseconds) {
     var start = new Date().getTime();
     for (var i = 0; i < 1e7; i++) {
