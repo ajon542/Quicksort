@@ -48,6 +48,8 @@ function drawArray(values) {
         x += width + 2;
     }
     
+    console.log("compares: " + compareCount + ", swapCount: " + swapCount);
+    
     // Refresh the view, so we always get an update, even if the tab is not in focus
     view.draw();
 }
@@ -76,6 +78,9 @@ function swap(items, a, b) {
     currB = b;
 }
 
+var swapCount = 0;
+var compareCount = 0;
+
 io.on('swap', function (data) {
     
     // Log the swap event.
@@ -83,7 +88,8 @@ io.on('swap', function (data) {
     
     // Swap our local copy of the items so they match the server.
     swap(items, data.a, data.b);
-    
+    swapCount++;
+
     // Draw the sorted items.
     drawArray(items);
 });
@@ -98,7 +104,5 @@ io.on('compare', function (data) {
     // Update the values being compared.
     compA = data.a;
     compB = data.b;
-    
-    // Draw the sorted items.
-    //drawArray(items);
+    compareCount++;
 });

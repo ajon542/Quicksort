@@ -1,5 +1,7 @@
 ﻿module.exports = quicksort;
 
+// http://algs4.cs.princeton.edu/23quicksort/
+
 function swap(items, a, b) {
     
     swapCallback(a, b);
